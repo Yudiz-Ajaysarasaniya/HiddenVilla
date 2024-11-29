@@ -1,0 +1,78 @@
+﻿@page "/blazorjs"
+@using CurrieTechnologies.Razor.SweetAlert2
+@inject IJSRuntime jsRuntime
+@inject SweetAlertService Swal
+
+<h3>BlazorJs</h3>
+
+<div>
+    <button class="btn btn-primary" @onclick="(() => TestConfirmBox(ConfirmMessage))"> Test Confirm Button</button>
+    <button class="btn btn-danger" @onclick="Alert"> Alert</button>
+</div>
+<br>
+<div>
+    <button class="btn btn-success" @onclick="TestSuccess"> Test Confirm Button</button>
+    <button class="btn btn-danger" @onclick="TestFailure"> Alert</button>
+</div>
+<br />
+<div>
+    <button class="btn btn-success" @onclick="Success"> Success</button>
+    <button class="btn btn-danger" @onclick="Failure"> Alert</button>
+</div>
+<br />
+
+
+
+<div class="row">
+    @if(ConfirmResult)
+    {
+        <p>Confirmation has been made!</p>
+    }
+    else
+    {
+        <p>Confirmation Pending!</p>
+    }
+</div>
+
+@code {
+    private string ConfirmMessage = "Are you sure you want to click";
+    private string AlertMessage = "Your Session Has Expired";
+    private bool ConfirmResult { get; set; }
+
+    private async Task TestConfirmBox( string message)
+    {
+        ConfirmResult = await jsRuntime.InvokeAsync<bool>("confirm", message); 
+    }
+    private async Task Alert()
+    {
+        await jsRuntime.InvokeAsync<string>("alert", AlertMessage);
+    }
+
+    private async Task TestSuccess()
+    {
+        await jsRuntime.ToastrSuccess("Success Message");
+    }
+    private async Task TestFailure()
+    {
+        await jsRuntime.ToastrError("Error Message");
+    }
+    private async Task Success()
+    {
+        //await jsRuntime.Success("Success Message");
+        await Swal.FireAsync("Good Job!", "Operation Success!", "success");
+    }
+    private async Task Failure()
+    {
+        await Swal.FireAsync("Oops...", "Something went wrong!", "error");
+    }
+    // private async Task SuccessSwal()
+    // {
+    //     await jsRuntime.InvokeVoidAsync("ShowSwal", "success", "Success Message");
+    // }
+    // private async Task FailureSwal()
+    // {
+    //     await jsRuntime.InvokeVoidAsync("ShowSwal", "error", "Error Message");
+    // }
+}
+
+ 

@@ -1,0 +1,34 @@
+﻿@page "/parentcomponent"
+
+<h1 class="text-danger">Parent Child Component</h1>
+
+<CascadingValue Value="@MessageForGrandChild" Name="MessageFromGrandFromParent">
+    <CascadingValue Value="@Number" Name="NumberFromGrandParent">
+        <ChildComponent @ref="childComponent" OnClickBtnMethod="ShowMessage" Title="Welcome!">
+            @* render fragment *@
+            <ChildContent> HI Bro!</ChildContent>
+            @*  <NewChildContent> How are you?</NewChildContent> *@
+        </ChildComponent>
+    </CascadingValue>
+</CascadingValue>
+
+<p><b>@message</b></p>
+<br />
+<div>
+    <button class="btn btn-success" @onclick="(() => childComponent.ShowToastrSuccess())">Show Alert</button>
+</div>
+
+<br />
+<SecondComponent placeholder="placeholder default"></SecondComponent>
+
+@code {
+    private ChildComponent childComponent;
+    private string message = "";
+    private string MessageForGrandChild = "This is a message from grand parent";
+    private string Number { get; set; } = "36";
+
+    private void ShowMessage(MouseEventArgs e)
+    {
+        message = "Text from parent";
+    }
+}

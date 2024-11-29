@@ -1,0 +1,34 @@
+﻿@* Room Details *@
+<div class="border p-2 col-4 offset-1" style="width: 300px;background-color:lightblue">
+    <p class="mb-1">Room - @item.Id</p>
+    <input type="checkbox" @onchange="SelectedRoom" />
+    <h5 class="mb-2">@item.RoomName</h5>
+    <p class="mb-2">Rs. @item.Price</p>
+    <div class="mb-2">
+        <input type="checkbox" @bind-value="item.IsActive" checked="@(item.IsActive ? "Active" :null)" />
+        <span class="ms-1">Is Active</span>
+    </div>
+    <span class="d-block mb-2">This room is @(item.IsActive ? "Active" : "In Active")</span>
+    @if (item.IsActive == true)
+    {
+        @foreach (var items in item.RoomProps)
+        {
+            <p class="mb-1">@items.Name - @items.Value</p>
+        }
+    }
+    @* passing parameter in component *@
+    <EditDeleteButton IsAdmin="true"></EditDeleteButton>
+</div>
+
+
+@code {
+    [Parameter]
+    public BlazorRoom item { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnRoomSelect { get; set; }
+
+    protected async Task SelectedRoom(ChangeEventArgs e)
+    {
+        await OnRoomSelect.InvokeAsync((bool)e.Value);
+    }
+}

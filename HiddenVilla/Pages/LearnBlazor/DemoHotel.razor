@@ -1,0 +1,105 @@
+﻿@page "/demohotel"
+@using Model
+
+<h4><b>We will display hotel rooms and amentities here!</b></h4>
+<div class=" border p-2 mg" style="background-color:azure">
+    <h3 style="color:dodgerblue">Room List [USING COMPONENT]</h3>
+    <br />
+    <h5 style="color:dodgerblue">Hotel Room`s</h5>
+    <br />
+    <span>Selected Rooms - @selectedRooms</span>
+    <div class="d-flex flex-row flex-wrap gap-3">
+        @foreach (var item in RoomList)
+        {
+            <IndividualRoom OnRoomSelect="SelectedRoom" item="@item"></IndividualRoom>
+        }
+    </div>
+    <br />
+    <br />
+    <h5 style="color:dodgerblue">Hotel Amenities[Assignment]</h5>
+    <div class="d-flex flex-row flex-wrap gap-3">
+        @foreach (var amenity in amenities)
+        {
+            <IndividualAmenities OnAmenitySelect="SelectedAmenity" amenities="@amenity">
+                <FirstFragment>#1</FirstFragment>
+                <SecondFragment>#2</SecondFragment>
+            </IndividualAmenities>
+        }
+    </div>
+    <p>Selected Amenity : @selectedAmenity</p>
+</div>
+
+@code {
+    private int selectedRooms { get; set; } = 0;
+    private string selectedAmenity { get; set; } = "";
+    private List<BlazorRoom> RoomList = new List<BlazorRoom>();
+    private List<Amenities> amenities = new List<Amenities>();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        RoomList.Add(new BlazorRoom()
+            {
+                Id = 101,
+                RoomName = "King Suite",
+                IsActive = true,
+                Price = 2000,
+                RoomProps = new List<BlazorRoomProp>
+                {
+                 new BlazorRoomProp{Id=1, Name="Sq Ft", Value="100"},
+                 new BlazorRoomProp{Id=2, Name="Occupancy", Value="3"}
+                }
+            });
+        RoomList.Add(new BlazorRoom()
+            {
+                Id = 102,
+                RoomName = "Villa Suite two bed room",
+                IsActive = true,
+                Price = 2500,
+                RoomProps = new List<BlazorRoomProp>
+                {
+                 new BlazorRoomProp{Id=1, Name="Sq Ft", Value="150"},
+                 new BlazorRoomProp{Id=2, Name="Occupancy", Value="5"}
+                }
+            });
+
+        amenities.Add(new Amenities()
+        {
+            Id = 111,
+            Name = "Gym",
+            Description = "24 * 7 gym room is available"
+        });
+        amenities.Add(new Amenities()
+            {
+                Id = 222,
+                Name = "Swimming Pool",
+                Description = "Pool room is open from 6am to 10pm"
+            });
+        amenities.Add(new Amenities()
+            {
+                Id = 333,
+                Name = "Free BreakFast",
+                Description = "Enjoy free breakfast at out hotel"
+            });
+
+    }
+
+    protected void SelectedRoom(bool isSelected)
+    {
+        if(isSelected)
+        {
+            selectedRooms++;
+        }
+        else
+        {
+            selectedRooms--;
+        }
+    }
+
+    protected void SelectedAmenity(string amenity)
+    {
+        selectedAmenity = amenity;
+    }
+}
+

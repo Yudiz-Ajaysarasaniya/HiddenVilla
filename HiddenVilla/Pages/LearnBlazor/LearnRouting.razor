@@ -1,0 +1,19 @@
+﻿@page "/LearnRouting"
+@page "/NewRouting"
+@page "/LearnRouting/{parameter}/{parameter2}"
+
+<h3>LearnRouting</h3>
+<br />
+<h4>Parameter - @parameter</h4>
+<h4>Parameter2 - @parameter2</h4>
+
+<NavLink class="btn btn-secondary" href="learnadvancerouting?Param1=Blazzing&Param2=Blazor">
+    <span class="oi oi-list-rich" aria-hidden="true"></span> Routing with query param
+</NavLink>
+
+@code {
+    [Parameter]
+    public string parameter { get; set; }
+    [Parameter]
+    public string parameter2 { get; set; }
+}

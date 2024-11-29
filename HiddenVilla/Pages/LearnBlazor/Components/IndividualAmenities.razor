@@ -1,0 +1,26 @@
+﻿@* Amentities Details *@
+<div class="border p-2 col-4 offset-1" style="width: 300px;background-color:lightblue" @onclick="(args) => SelectAmenity(args, amenities.Name)">
+    <h4 class="mb-1">Room - @amenities.Id</h4>
+    <p class="mb-2">@amenities.Name</p>
+    <p class="mb-2">@amenities.Description</p>
+    <p>RF from parent - @FirstFragment @SecondFragment</p>
+
+    @* passing parameter in component *@
+    <EditDeleteButton IsAdmin="true"></EditDeleteButton>
+</div>
+
+@code {
+    [Parameter]
+    public Amenities amenities { get; set; }
+    [Parameter]
+    public RenderFragment FirstFragment { get; set; }
+    [Parameter]
+    public RenderFragment SecondFragment { get; set; }
+    [Parameter]
+    public EventCallback<string> OnAmenitySelect { get; set; } //simple api for communication between chilled and parent component
+                                                               //here calling parent component method in chilled component
+    private async Task SelectAmenity(MouseEventArgs e, string name)
+    {
+        await OnAmenitySelect.InvokeAsync(name);
+    }
+}

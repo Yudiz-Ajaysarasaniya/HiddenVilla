@@ -1,0 +1,27 @@
+﻿
+
+<h3>LifeCycle Chiled Component</h3>
+@* <PageTitle>LifeCycle</PageTitle> *@
+
+@foreach (var item in EvenType)
+{
+    @item
+    <hr />
+}
+
+@code {
+    [Parameter]
+    public int CountValue { get; set; }
+    private List<string> EvenType = new List<string>();
+
+    protected override void OnInitialized()
+    {
+        EvenType.Add("Child - OnInitialized is called");
+    }
+
+    protected override void OnParametersSet()
+    {
+        EvenType.Add("Child - OnParametersSet is called");
+    }
+}
+

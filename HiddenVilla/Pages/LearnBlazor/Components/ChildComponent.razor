@@ -1,0 +1,42 @@
+﻿@inject IJSRuntime JsRuntime
+
+<div>
+    <div class="alert alert-info">@Title</div>
+    <div class="alert alert-success">
+        @if (NewChildContent == null)
+        {
+            @if (ChildContent != null)
+            {
+                <span>@ChildContent</span>
+            }
+            else
+            {
+                <span>Hello from empty fragment</span>
+            }
+        }
+        else
+        {
+            <span>@NewChildContent</span>
+        }
+    </div>
+    <button class="btn btn-danger" @onclick="OnClickBtnMethod">Button</button>
+    <GrandChildComponent></GrandChildComponent>
+
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } //to pass any value within the child component
+    [Parameter]
+    public RenderFragment NewChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClickBtnMethod { get; set; } //directly calling method from parent without passing any parameter
+
+    public async Task ShowToastrSuccess()
+    {
+        await JsRuntime.ToastrSuccess("Wow! Success is on its way ");
+    }
+}

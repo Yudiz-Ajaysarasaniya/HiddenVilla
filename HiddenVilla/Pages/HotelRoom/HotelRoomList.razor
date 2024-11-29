@@ -1,0 +1,99 @@
+﻿@page "/hotel-room"
+@using HiddenVilla.Helper
+@using Models.DTO
+@using Business.Repository.IRepository
+@inject NavigationManager Navigation
+@inject IHotelRoomRepository HotelRoomRepository
+@inject IJSRuntime jsRuntime
+@inject HiddenVilla.Service.IService.IFileUpload fileUpload 
+@attribute [Authorize(Roles = Common.Roles.Role_Admin)]
+
+<div class="row mt-4">
+    <div class="col-8">
+        <h3 class="card-title text-info">Hote Room List</h3>
+    </div>
+    <div class="col-3 offset-1">
+        <NavLink href="hotel-room/create" class="btn btn-primary">AddRoom </NavLink>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-12">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Occupancy</th>
+                    <th>Rate</th>
+                    <th>SqFt</th>
+                   @*  <th>Details</th> *@
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(RoomList.Any())
+                {
+                    @foreach(var Room in RoomList)
+                    {
+                        <tr>
+                            <td>@Room.Name</td>
+                            <td>@Room.Occupancy</td>
+                            <td>@Room.RagularRate.ToString("c")</td>
+                            <td>@Room.SqFt</td>
+                           @*  <td>@Room.Details</td> *@
+                            <td>
+                                <NavLink class="btn btn-primary" href="@($"hotel-room/edit/{Room.Id}")">Edit</NavLink>
+                                <button class="btn btn-danger" @onclick="()=>HandleDelete(Room.Id)">Delete</button> 
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">No Data Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<DeleteConfirmation IsParentCompenentProcessing="IsProcessing" OnRoomDelete="ConfirmDelete"></DeleteConfirmation>
+
+@code {
+    private IEnumerable<HotelRoomDTO> RoomList { get; set; } = new List<HotelRoomDTO>();
+    private int? DeleteRoomId { get; set; } = null;
+    private bool IsProcessing { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        RoomList = await HotelRoomRepository.GetAllHotelRooms();
+    }
+
+    private async Task HandleDelete(int roomId)
+    {
+        DeleteRoomId = roomId;
+        // await jsRuntime.InvokeVoidAsync("HiddenVillaFunctions.ShowDeleteConfirmation");
+        await jsRuntime.InvokeVoidAsync("eval", "$('#deleteConfirmationModal').modal('show')");
+    }
+
+    public async Task ConfirmDelete(bool isConfirmed)
+    {
+        IsProcessing = true;
+        if(isConfirmed && DeleteRoomId != null)
+        {
+            HotelRoomDTO hotelRoom = await HotelRoomRepository.GetHotelRoom(DeleteRoomId.Value);
+            foreach(var image in hotelRoom.HotelRoomImages)
+            {
+                var ImageName = image.RoomImageUrl.Replace($"{Navigation.BaseUri}RoomImages/", "");
+                fileUpload.DeleteFile(ImageName);
+            }
+            await HotelRoomRepository.DeleteHotelRoom(DeleteRoomId.Value);
+            await jsRuntime.ToastrSuccess("Hotel Room Updated Successfully");
+            RoomList = await HotelRoomRepository.GetAllHotelRooms();
+        }
+        await jsRuntime.InvokeVoidAsync("eval", "$('#deleteConfirmationModal').modal('hide')");
+        IsProcessing = false;
+    }
+}
