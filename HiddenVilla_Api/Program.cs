@@ -28,17 +28,17 @@ builder.Services.Configure<APISettings>(appSettings);
 //builder.Services.Configure<APISettings>(builder.Configuration.GetSection("APISettings"));
 
 // Configure Stripe
-//builder.Services.AddTransient<StripeClient>(_ => new StripeClient(builder.Configuration["Stripe:ApiKey"]));
-builder.Configuration.AddUserSecrets<Program>();
-builder.Services.AddSingleton<StripeClient>(sp =>
-{
-    // Retrieve the API key from configuration
-    var configuration = sp.GetRequiredService<IConfiguration>();
-    var stripeApiKey = configuration.GetValue<string>("ApiKey");
+builder.Services.AddTransient<StripeClient>(_ => new StripeClient(builder.Configuration["Stripe:ApiKey"]));
+//builder.Configuration.AddUserSecrets<Program>();
+//builder.Services.AddSingleton<StripeClient>(sp =>
+//{
+//    // Retrieve the API key from configuration
+//    var configuration = sp.GetRequiredService<IConfiguration>();
+//    var stripeApiKey = configuration.GetValue<string>("ApiKey");
 
-    // Initialize and return the StripeClient
-    return new StripeClient(stripeApiKey);
-});
+//    // Initialize and return the StripeClient
+//    return new StripeClient(stripeApiKey);
+//});
 
 
 var apisettings = appSettings.Get<APISettings>();

@@ -9,6 +9,7 @@
 
         public const string Payment = BaseRoute + "/payment/checkout";
         public const string SaveOrder = BaseRoute + "/roomorder/create_order";
+        public const string PaymentSuccess = BaseRoute + "/roomorder/paymentsuccess";
     }
 }
 

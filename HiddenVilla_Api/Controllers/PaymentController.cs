@@ -27,6 +27,7 @@ namespace HiddenVilla_Api.Controllers
             try
             {
                 var domain = configuration.GetValue<string>("Client_URL");
+                Console.WriteLine($"Domain: {domain}, Amount: {request.Amount}, Product: {request.ProductName}");
 
                 var options = new SessionCreateOptions
                 {
@@ -51,7 +52,7 @@ namespace HiddenVilla_Api.Controllers
                         }
                     },
                     Mode = "payment",
-                    SuccessUrl = domain + "/success-payment?sessionid={{CHECKOUT_SESSION_ID}}",
+                    SuccessUrl = domain + "success-payment?sessionid={{CHECKOUT_SESSION_ID}}",
                     CancelUrl = domain + request.ReturnUrl
                 };
 
