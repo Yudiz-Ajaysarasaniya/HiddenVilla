@@ -92,9 +92,23 @@ namespace Business.Repository
             return status;
         }
 
-        public Task<RoomOrderDetailsDTO> PaymentStatus(int id)
+        public async Task<RoomOrderDetailsDTO> PaymentStatus(int id)
         {
-            throw new NotImplementedException();
+            var data = await dbContext.RoomOrderDetails.FindAsync(id);
+           
+            if (data == null)
+            {
+                return null;
+            }
+            if (!data.IsPaymentSuccess)
+            {
+                data.IsPaymentSuccess = true;
+                data.Status = SetStatus.Status_Booked;
+                var result = dbContext.RoomOrderDetails.Update(data);
+                await dbContext.SaveChangesAsync();
+                return mapper.Map<RoomOrderDetails, RoomOrderDetailsDTO>(result.Entity);
+            }
+            return new RoomOrderDetailsDTO();
         }
 
         public Task<bool> UpdateOrderStatus(int roomOrderId, string status)

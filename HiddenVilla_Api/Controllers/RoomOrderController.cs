@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTO;
-
+using Stripe;
+using Stripe.Checkout;
 namespace HiddenVilla_Api.Controllers
 {
     [Route("api/[controller]")]
@@ -45,6 +46,35 @@ namespace HiddenVilla_Api.Controllers
                 return BadRequest(new ErrorModel
                 {
                     ErrorMessage = "Error while creating booking"
+                });
+            }
+        }
+        #endregion
+
+        #region
+        [HttpPost("paymentsuccess")]
+        public async Task<IActionResult> PaymentSuccess([FromBody] RoomOrderDetailsDTO orderDetailsDTO)
+        {
+            orderDetailsDTO.HotelRoomDTO.ImageUrls = [];
+            var services = new SessionService();
+            var sessionDetails = services.Get(orderDetailsDTO.StripeSessionId);
+            if(sessionDetails.PaymentStatus.ToLower() == "paid")
+            {
+                var result = await roomOrder.PaymentStatus(orderDetailsDTO.Id);
+                if(result == null)
+                {
+                    return BadRequest(new ErrorModel
+                    {
+                        ErrorMessage = "Can not update payment status"
+                    });
+                }
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(new ErrorModel
+                {
+                    ErrorMessage = "Can not update payment status"
                 });
             }
         }

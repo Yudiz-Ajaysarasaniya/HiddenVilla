@@ -1,0 +1,47 @@
+﻿@page "/success-payment"
+@inject IRoomOrderDetailsService roomOrderDetailsService
+
+<div class="container">
+    @if (!IsPaymentComplete)
+    {
+        <div style="position:fixed;top:50%;left:50%;margin-top:-50px;margin-left:-100px;">
+            <img src="images/ajax-loader.gif" />
+        </div>
+    }
+    else
+    {
+        <div class="row mt-4 pt-4">
+            <div class="col-10 offset-1 text-center">
+            <h2 class="text-warning">Booking Confirmed</h2>
+            <p>Your order has been booked successfully</p>
+            <hr />
+            <p>Thank you for your payment.</p>
+            <p>Order ID: @OrderId</p>
+        </div>
+        <div class="col-8 offset-2">
+            <img src="images/Success.png" alt="Success" class="img-fluid" width="100%" height="100%" style="border-radius: 30px;" />
+        </div>
+    </div>
+    }
+</div>
+
+@code {
+    private bool IsPaymentComplete { get; set; }
+    private int OrderId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var orderDetails = await localStorage.GetItemAsync<RoomOrderDetailsDTO>(LStorage.RoomOrder);
+        OrderId = orderDetails.Id;
+        //orderDetails.HotelRoomDTO.ImageUrls = [];
+
+        var finalRoomDetails = await roomOrderDetailsService.MarkPaymentSuccess(orderDetails);
+
+        if (finalRoomDetails.Status == SetStatus.Status_Booked)
+        {
+            await localStorage.RemoveItemAsync(LStorage.RoomOrder);
+            await localStorage.RemoveItemAsync(LStorage.localstorage);
+            IsPaymentComplete = true;
+        }
+    }
+}

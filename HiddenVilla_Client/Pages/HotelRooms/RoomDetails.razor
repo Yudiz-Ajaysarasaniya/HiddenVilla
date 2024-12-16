@@ -226,7 +226,7 @@ else
             await jsRunTime.InvokeVoidAsync("redirectToCheckout", result.Data.ToString());
         }
         catch(Exception e)
-        {
+        {   
            await jsRunTime.ToastrError(e.Message);
         }
     }
