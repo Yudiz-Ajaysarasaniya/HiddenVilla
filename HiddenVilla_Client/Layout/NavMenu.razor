@@ -1,4 +1,7 @@
-﻿<nav class="navbar navbar-expand-sm bg-success" data-bs-theme="dark">
+﻿@inject IAuthenticationService AccountService
+
+
+<nav class="navbar navbar-expand-sm bg-success" data-bs-theme="dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Navbar</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
@@ -7,21 +10,50 @@
         <div class="collapse navbar-collapse pr-2" id="navbarColor01">
             <ul class="navbar-nav mr-auto"></ul>
             <ul class="my-0 navbar-nav">
-                <li class="nav-item p-0">
-                    <NavLink class="nav-link" href="registration">
-                        <span class="p-2">
-                            Register
-                        </span>
-                    </NavLink>
-                </li>
-                <li class="nav-item p-0">
-                    <NavLink class="nav-link" href="login">
-                        <span class="p-2">
-                            Login
-                        </span>
-                    </NavLink>
-                </li>
+                <AuthorizeView>
+                    <Authorized>
+                        <li class="nav-item p-0">
+                            <span class="p-2 nav-link">
+                                    Hello,@context.User.Identity.Name
+                                </span>
+                        </li>
+                        <li class="nav-item p-0">
+                            <button class="btn btn-light " @onclick="Logout">
+                                <span class="p-2">
+                                    Logout
+                                </span>
+                            </button>
+                        </li>
+                    </Authorized>
+                    <NotAuthorized>
+                        <li class="nav-item p-0">
+                            <NavLink class="nav-link" href="register">
+                                <span class="p-2">
+                                    Register
+                                </span>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item p-0">
+                            <NavLink class="nav-link" href="/login">
+                                <span class="p-2">
+                                    Login
+                                </span>
+                            </NavLink>
+                        </li>
+                    </NotAuthorized>
+                </AuthorizeView>
+              
             </ul>
         </div>
     </div>
 </nav>
+
+
+@code{
+    private async Task Logout()
+    {
+        await AccountService.LogoutUser();
+        navManager.NavigateTo("/login");
+        //StateHasChanged();
+    }
+}

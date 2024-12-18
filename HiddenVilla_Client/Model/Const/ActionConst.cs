@@ -10,6 +10,8 @@
         public const string Payment = BaseRoute + "/payment/checkout";
         public const string SaveOrder = BaseRoute + "/roomorder/create_order";
         public const string PaymentSuccess = BaseRoute + "/roomorder/paymentsuccess";
+        public const string Register = BaseRoute + "/account/signup";
+        public const string Login = BaseRoute + "/account/login";
     }
 }
 

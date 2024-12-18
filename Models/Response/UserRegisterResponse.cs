@@ -9,6 +9,6 @@ namespace Models.Response
     public class UserRegisterResponse
     {
         public bool IsSuccess { get; set; }
-        public IEnumerable<string> Errors { get; set; }
+        public List<string> Errors { get; set; }
     }
 }

@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Business\Business.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\HiddenVilla.notify\HiddenVilla.notify.csproj" />
     <ProjectReference Include="..\HiddenVilla_Client\HiddenVilla_Client.csproj" />
   </ItemGroup>
 

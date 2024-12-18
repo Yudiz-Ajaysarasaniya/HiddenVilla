@@ -1,0 +1,79 @@
+﻿@page "/login"
+@using Models.Request
+@using System.Web
+@inject IAuthenticationService AccountService
+
+
+<div id="logreg-forms" class="bg-dark border">
+
+    <h1 class="h3 mb-3 pt-3 font-weight-normal text-primary" style="text-align:center;">Sign In</h1>
+
+    <EditForm Model="UserLogin" OnValidSubmit="LoginAsync">
+        <DataAnnotationsValidator />
+        @if (ShowAuthenticationErrors)
+        {
+            <p class="text-center text-danger">@Errors</p>
+        }
+
+        <InputText @bind-Value="UserLogin.Email" id="email" placeholder="Email..." class="form-control mb-2" />
+        <ValidationMessage For="(()=>UserLogin.Email)"></ValidationMessage>
+        <InputText @bind-Value="UserLogin.Password" type="password" placeholder="Password..." id="password" class="form-control mb-2" />
+        <ValidationMessage For="(()=>UserLogin.Password)"></ValidationMessage>
+
+        @if (IsProcessing)
+        {
+            <button type="submit" class="btn btn-success btn-block disabled"><i class="fas fa-sign-in-alt"></i> Please Wait...</button>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-success btn-block position-relative"><i class="fas fa-sign-in-alt"></i> Sign in</button>
+        }
+        <a href="register"
+           class="btn btn-primary text-white mt-3"><i class="fas fa-user-plus"></i> Register as a new user</a>
+    </EditForm>
+
+</div>
+
+@code {
+    private UserLoginRequest UserLogin = new UserLoginRequest();
+
+    private bool IsProcessing = false;
+    private bool ShowAuthenticationErrors = false;
+    public string? Errors { get; set; }
+    public string? ReturnUrl { get; set; }
+
+    private async Task LoginAsync()
+    {
+        IsProcessing = true;
+        ShowAuthenticationErrors = false;
+
+        var result = await AccountService.LoginUser(UserLogin);
+        if (result.IsSuccess)
+        {
+            IsProcessing = false;
+
+            var absoluteUri = new Uri(navManager.Uri);
+            var queryParam = HttpUtility.ParseQueryString(absoluteUri.Query);
+            ReturnUrl = queryParam["returnUrl"];
+
+            if (string.IsNullOrEmpty(ReturnUrl))
+            {
+                navManager.NavigateTo("/");
+                await jsRunTime.ToastrSuccess("Login Successful");
+                //StateHasChanged();
+            }
+            else
+            {
+                navManager.NavigateTo("/" + ReturnUrl);
+            }
+        }
+        else
+        {
+            IsProcessing = false;
+            ShowAuthenticationErrors = true;
+            Errors = result.ErrorMessage;
+            await jsRunTime.ToastrError(result.ErrorMessage);
+        }
+
+    }
+}

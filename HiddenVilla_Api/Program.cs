@@ -13,6 +13,9 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using Stripe;
 using Microsoft.Extensions.DependencyInjection;
+using HiddenVilla.notify.Models;
+using HiddenVilla.notify.Implementation;
+using HiddenVilla.notify;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,16 +32,9 @@ builder.Services.Configure<APISettings>(appSettings);
 
 // Configure Stripe
 builder.Services.AddTransient<StripeClient>(_ => new StripeClient(builder.Configuration["Stripe:ApiKey"]));
-//builder.Configuration.AddUserSecrets<Program>();
-//builder.Services.AddSingleton<StripeClient>(sp =>
-//{
-//    // Retrieve the API key from configuration
-//    var configuration = sp.GetRequiredService<IConfiguration>();
-//    var stripeApiKey = configuration.GetValue<string>("ApiKey");
 
-//    // Initialize and return the StripeClient
-//    return new StripeClient(stripeApiKey);
-//});
+
+IServiceCollection serviceCollection = builder.Services.Configure<EmailConfigs>(builder.Configuration.GetSection("EmailConfigs"));
 
 
 var apisettings = appSettings.Get<APISettings>();
@@ -75,6 +71,7 @@ builder.Services.AddScoped<IHotelRoomRepository, HotelRoomRepository>();
 builder.Services.AddScoped<IHotelImagesRepository, HotelImagesRepository>();
 builder.Services.AddScoped<IHotelAmenityRepository, HotelAmenityRepository>();
 builder.Services.AddScoped<IRoomOrderDetailsRepository, RoomOrderDetailsRepository>();
+builder.Services.AddScoped<IMessages, Messages>();
 
 builder.Services.AddCors(o => o.AddPolicy("HiddenVilla", options =>
 {

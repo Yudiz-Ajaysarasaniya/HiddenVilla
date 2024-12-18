@@ -1,5 +1,9 @@
 ﻿@page "/success-payment"
+@using Microsoft.AspNetCore.Authorization
+@using Models.Request
 @inject IRoomOrderDetailsService roomOrderDetailsService
+@attribute [Authorize(Roles = Roles.Role_Customer)]
+
 
 <div class="container">
     @if (!IsPaymentComplete)
@@ -19,7 +23,7 @@
             <p>Order ID: @OrderId</p>
         </div>
         <div class="col-8 offset-2">
-            <img src="images/Success.png" alt="Success" class="img-fluid" width="100%" height="100%" style="border-radius: 30px;" />
+            <img src="images/Success.jpg" alt="Success" class="img-fluid" width="100%" height="100%" style="border-radius: 30px;" />
         </div>
     </div>
     }
@@ -28,14 +32,18 @@
 @code {
     private bool IsPaymentComplete { get; set; }
     private int OrderId { get; set; }
+    private PaymentSuccessRequest paymentSuccessRequest = new PaymentSuccessRequest();
 
     protected override async Task OnInitializedAsync()
     {
         var orderDetails = await localStorage.GetItemAsync<RoomOrderDetailsDTO>(LStorage.RoomOrder);
         OrderId = orderDetails.Id;
+        paymentSuccessRequest.Id = orderDetails.Id;
+        paymentSuccessRequest.StripeSessionId = orderDetails.StripeSessionId;
+        paymentSuccessRequest.Status = orderDetails.Status;
         //orderDetails.HotelRoomDTO.ImageUrls = [];
 
-        var finalRoomDetails = await roomOrderDetailsService.MarkPaymentSuccess(orderDetails);
+        var finalRoomDetails = await roomOrderDetailsService.MarkPaymentSuccess(paymentSuccessRequest);
 
         if (finalRoomDetails.Status == SetStatus.Status_Booked)
         {

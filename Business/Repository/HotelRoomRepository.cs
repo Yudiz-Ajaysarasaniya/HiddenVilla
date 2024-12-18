@@ -66,6 +66,15 @@ namespace Business.Repository
             {
                 IEnumerable<HotelRoomDTO> hotelRoomDTOs =
                             mapper.Map<IEnumerable<HotelRoom>, IEnumerable<HotelRoomDTO>>(dbContext.HotelRooms.Include(x => x.HotelRoomImages));
+
+                if (!string.IsNullOrEmpty(checkInDatestr) && !string.IsNullOrEmpty(checkOutDatestr))
+                {
+                    foreach (var hotelRoom in hotelRoomDTOs)
+                    { 
+                        hotelRoom.IsBooked = await IsRoomBooked(hotelRoom.Id, checkInDatestr, checkOutDatestr);
+                    }
+                }
+
                 return hotelRoomDTOs;
             }
             catch(Exception e)
@@ -82,6 +91,11 @@ namespace Business.Repository
                 //HotelRoom hotelRoom = await dbContext.HotelRooms.FirstOrDefaultAsync(x => x.Id == roomId);
                 HotelRoomDTO hotelRoom = mapper.Map<HotelRoom, HotelRoomDTO>(
                     await dbContext.HotelRooms.Include(x => x.HotelRoomImages).FirstOrDefaultAsync(x => x.Id == roomId)); 
+
+                if(!string.IsNullOrEmpty(checkInDatestr) && !string.IsNullOrEmpty(checkOutDatestr))
+                {
+                    hotelRoom.IsBooked = await IsRoomBooked(roomId, checkInDatestr, checkOutDatestr);
+                }
 
                 return hotelRoom;
             }
@@ -130,5 +144,37 @@ namespace Business.Repository
             }
             return 0;
         }
+
+        public async Task<bool> IsRoomBooked(int roomId, string checkInDatestr, string checkOutDatestr)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(checkInDatestr) && !string.IsNullOrEmpty(checkOutDatestr))
+                {
+
+                    var checkInDate = DateTime.ParseExact(checkInDatestr, "MM/dd/yyyy", null);
+                    var checkOutDate = DateTime.ParseExact(checkOutDatestr, "MM/dd/yyyy", null);
+
+                    //var checkInDate = Convert.ToDateTime(checkInDatestr);
+                    //var checkOutDate = Convert.ToDateTime(checkOutDatestr);
+
+                    var existingBooking = await dbContext.RoomOrderDetails.Where(x => x.RoomId == roomId && x.IsPaymentSuccess &&
+                                         (checkInDate < x.CheckInDate.Date && checkInDate.Date >= x.CheckInDate ||
+                                         checkOutDate.Date > x.CheckInDate.Date && checkInDate.Date <= x.CheckInDate.Date)).FirstOrDefaultAsync();
+
+                    if (existingBooking != null)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
     }
 }

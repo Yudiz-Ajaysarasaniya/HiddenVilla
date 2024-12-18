@@ -78,23 +78,9 @@ namespace Business.Repository
             }
         }
 
-        public async Task<bool> IsRoomBooked(int roomId, DateTime checkInDate, DateTime checkOutDate)
-        {
-            var status = false;
-            var existingBooking = await dbContext.RoomOrderDetails.Where(x => x.RoomId == roomId && x.IsPaymentSuccess &&
-            (checkInDate < x.CheckInDate.Date && checkInDate.Date > x.CheckInDate ||
-            checkOutDate.Date > x.CheckInDate.Date && checkInDate.Date < x.CheckInDate.Date)).FirstOrDefaultAsync();
-
-            if (existingBooking != null)
-            {
-                status = true;
-            }
-            return status;
-        }
-
         public async Task<RoomOrderDetailsDTO> PaymentStatus(int id)
         {
-            var data = await dbContext.RoomOrderDetails.FindAsync(id);
+            var data = await dbContext.RoomOrderDetails.FirstOrDefaultAsync(x => x.Id.Equals(id));
            
             if (data == null)
             {

@@ -1,7 +1,10 @@
 ﻿@page "/hotel/room-details/{Id:int}"
+@using Microsoft.AspNetCore.Authorization
+@using Models.Response
 @inject IHotelRoomService hotelRoomService
 @inject IPaymentService paymentService
 @inject IRoomOrderDetailsService orderDetailService
+@attribute [Authorize(Roles = Roles.Role_Customer)]
 
 @if (RoomBookingVM?.OrderDetailsDTO?.HotelRoomDTO?.HotelRoomImages == null)
 {
@@ -19,7 +22,7 @@ else
             </div>
 
             <div class="row">
-               @*  <div class="col-6">
+                <div class="col-6">
                     <div id="" class="carousel slide mb-4 m-md-3 m-0 pt-3 pt-md-0" data-ride="carousel">
                         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                             <ol class="carousel-indicators">
@@ -70,7 +73,7 @@ else
                             </a>
                         </div>
                     </div>
-                </div> *@
+                </div>
                 <div class="col-6">
                     <span class="float-right pt-4">
                         <span class="float-right">Max Occupancy : @RoomBookingVM.OrderDetailsDTO.HotelRoomDTO.Occupancy adults </span><br />
@@ -187,6 +190,15 @@ else
                     RoomBookingVM.OrderDetailsDTO.HotelRoomDTO.TotalDays = 1;
                     RoomBookingVM.OrderDetailsDTO.HotelRoomDTO.TotalAmmount = RoomBookingVM.OrderDetailsDTO.HotelRoomDTO.RagularRate;
                 }
+            }
+
+            if (await localStorage.GetItemAsync<User>(LStorage.UserDetails) != null)
+            {
+                var userInfo = await localStorage.GetItemAsync<User>(LStorage.UserDetails);
+                RoomBookingVM.OrderDetailsDTO.UserId = userInfo.Id;
+                RoomBookingVM.OrderDetailsDTO.Name = userInfo.Name;
+                RoomBookingVM.OrderDetailsDTO.Email = userInfo.Email;
+                RoomBookingVM.OrderDetailsDTO.Phone = userInfo.Phone;
             }
         }
         catch(Exception e)

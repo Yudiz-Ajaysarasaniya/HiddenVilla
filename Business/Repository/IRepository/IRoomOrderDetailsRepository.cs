@@ -14,7 +14,6 @@ namespace Business.Repository.IRepository
         public Task<RoomOrderDetailsDTO> GetRoomOrderDetails(int roomOrderId);
         public Task<IEnumerable<RoomOrderDetailsDTO>> GetAllRoomOrderDetails();
         public Task<bool> UpdateOrderStatus(int roomOrderId, string status);
-        public Task<bool> IsRoomBooked(int roomId, DateTime CheckInDate, DateTime CheckOutDate);
 
     }
 }

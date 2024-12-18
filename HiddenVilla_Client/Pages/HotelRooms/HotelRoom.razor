@@ -96,7 +96,7 @@
                             }
                         </div>
                         <a class="carousel-control-prev" href="#carouselExampleIndicators_@room.Id" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="carousel-control-prev" aria-hidden="true"></span>
                             <span class="sr-only">Previous</span>
                         </a>
                         <a class="carousel-control-next" href="#carouselExampleIndicators_@room.Id" role="button" data-slide="next">
@@ -117,11 +117,14 @@
                             <div class="row pb-3 pt-2">
                                 <div class="col-12 col-lg-11 offset-lg-1">
                                     
+                                        @if(room.IsBooked)
+                                        {
                                         <button disabled class="btn btn-secondary btn-block">Sold Out</button>
-                                   
-
+                                    }
+                                    else
+                                    {
                                         <a href="@($"hotel/room-details/{room.Id}")" class="btn btn-success btn-block">Book</a>
-                                    
+                                    }
                                 </div>
                             </div>
                             <div class="row ">

@@ -65,7 +65,7 @@ namespace HiddenVilla_Api.Controllers
                 return BadRequest(new UserRegisterResponse
                 {
                     IsSuccess = false,
-                    Errors = error
+                    Errors = error.ToList()
                 });
             }
 
@@ -77,7 +77,7 @@ namespace HiddenVilla_Api.Controllers
                 return BadRequest(new UserRegisterResponse
                 {
                     IsSuccess = false,
-                    Errors = error
+                    Errors = (List<string>)error
                 });
             }
             //return Ok(StatusCodes.Status200OK);

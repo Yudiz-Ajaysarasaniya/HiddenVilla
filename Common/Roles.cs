@@ -9,7 +9,9 @@ namespace Common
     public static class Roles
     {
         public const string Role_Admin = "Admin";
+
         public const string Role_Customer = "Customer";
+
         public const string Role_Employee = "Employee";
     }
 
@@ -17,6 +19,8 @@ namespace Common
     {
         public const string localstorage = "RoomBookingInfo";
         public const string RoomOrder = "RoomOrders";
+        public const string Local_Token = "JWT Token";
+        public const string UserDetails = "User Details";
     }
 
     public class SetStatus
