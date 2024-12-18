@@ -30,12 +30,14 @@ builder.Services.AddTransient<IHotelImagesRepository, HotelImagesRepository>();
 builder.Services.AddTransient<IFileUpload, FileUpload>();
 builder.Services.AddTransient<IHotelAmenityRepository, HotelAmenityRepository>();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+builder.Services.AddScoped<IRoomOrderDetailsRepository, RoomOrderDetailsRepository>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSweetAlert2();
+builder.Services.AddRazorComponents();
 
 var app = builder.Build();
 

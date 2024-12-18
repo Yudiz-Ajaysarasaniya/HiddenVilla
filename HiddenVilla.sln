@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiddenVilla_Api", "HiddenVi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiddenVilla_Client", "HiddenVilla_Client\HiddenVilla_Client.csproj", "{8B929EA1-720D-4AC7-9126-7D5F870C7D26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HiddenVilla.notify", "HiddenVilla.notify\HiddenVilla.notify.csproj", "{24F8E32E-12D9-42CE-BF97-958B3213D742}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiddenVilla.notify", "HiddenVilla.notify\HiddenVilla.notify.csproj", "{24F8E32E-12D9-42CE-BF97-958B3213D742}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

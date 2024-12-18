@@ -249,10 +249,9 @@
             var images = new List<string>();
             if(e.GetMultipleFiles().Count > 0)
             {
-                foreach(var file in e.GetMultipleFiles())
+                foreach (var file in e.GetMultipleFiles())
                 {
-                    FileInfo fileInfo = new FileInfo(file.Name);
-                    if (fileInfo.Extension.ToLower() == ".jpg" || fileInfo.Extension.ToLower() == ".png" || fileInfo.Extension.ToLower() == ".jpeg")
+                    if (file.Name.ToLower().EndsWith(".jpg") || file.Name.ToLower().EndsWith(".png") || file.Name.ToLower().EndsWith(".jpeg"))
                     {
                         var UploadedImage = await FileUpload.UploadFile(file);
                         images.Add(UploadedImage);
