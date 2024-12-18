@@ -11,7 +11,7 @@ namespace HiddenVilla_Api.Helper
             this.Messages = message;
         }
 
-        public void SendPaymentSuccessEmail(string email)
+        public void SendPaymentSuccessEmail(string email, double amount)
         {
             string emailBody = DesignEmail(
            "Payment Successful",
@@ -24,7 +24,7 @@ namespace HiddenVilla_Api.Helper
         </tr>
         <tr>
             <td style=""line-height: 24px; font-family: 'Nunito', sans-serif; color: #292929;"">
-                We are pleased to inform you that your payment of <b>{10000}</b> on <b>{17-12-2024}</b> has been successfully processed. 
+                We are pleased to inform you that your payment of <b>{amount}</b> on <b>{17-12-2024}</b> has been successfully processed. 
             </td>
         </tr>
         <tr>
@@ -40,7 +40,7 @@ namespace HiddenVilla_Api.Helper
         </tr>
         <tr align=""center"">
             <td>
-                <a href=""http://20.69.56.199:8087/homelanding"" 
+                <a href=""https://localhost:7169/"" 
                    style=""font-family: 'Nunito', sans-serif; padding: 12px; min-width: 216px; display: inline-block; background: #28a745; border-radius: 4px; font-size: 14px; line-height: 20px; color: #fff; text-decoration: none;"">
                     Visit Our Website
                 </a>
@@ -82,7 +82,7 @@ namespace HiddenVilla_Api.Helper
 									<table width=""552px"" cellpadding=""0"" cellspacing=""0"" align=""center"" bgcolor=""#086AA1"" style=""min-width: 600px; border-radius: 4px; padding: 20px 10px;"">
 										<tr>
 											<td>
-												<img src=""https://gateiz-media.s3.ap-south-1.amazonaws.com/HostProfile/RahulVarma-fronta7e0b63e-0caa-4908-b026-553d0acd0d6c.png"" style=""width: 130px; max-width: 250px; margin: auto; display: table;"">
+												<h2 style=""width: 130px; max-width: 250px; color: #fff; margin: auto; display: table;"">HiddenVilla</h2>
 											</td>
 										</tr>
 									</table>
@@ -132,7 +132,7 @@ namespace HiddenVilla_Api.Helper
 													</tr>
 													<tr>
 														<td style=""text-align: left; font-size: 16px; font-weight: normal; line-height: 24px; color: #212121;"">
-															Gateiz
+															HiddenVilla
 														</td>
 													</tr>
 												</table>
@@ -159,7 +159,7 @@ namespace HiddenVilla_Api.Helper
 										<tr>
 											<td style=""width: 50%; flex-shrink: 0px; font-size: 16px; line-height: 24px; color: #ffffff;"">
 												Need more help?</td>
-											<td style=""width: 50%; flex-shrink: 0px; text-align: right;""><a href=""http://20.69.56.199:8087/homelanding"" style=""padding: 16px 30px; border-radius: 8px; display: inline-block; color: #ffffff; font-weight: 500; background:transparent; text-decoration: none; border: 2px solid #ffffff;"">Go
+											<td style=""width: 50%; flex-shrink: 0px; text-align: right;""><a href=""https://localhost:7169/"" style=""padding: 16px 30px; border-radius: 8px; display: inline-block; color: #ffffff; font-weight: 500; background:transparent; text-decoration: none; border: 2px solid #ffffff;"">Go
 													to Website</a></td>
 										</tr>
 									</table>

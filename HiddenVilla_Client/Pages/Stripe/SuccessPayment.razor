@@ -41,6 +41,8 @@
         paymentSuccessRequest.Id = orderDetails.Id;
         paymentSuccessRequest.StripeSessionId = orderDetails.StripeSessionId;
         paymentSuccessRequest.Status = orderDetails.Status;
+        paymentSuccessRequest.Email = orderDetails.Email;
+        paymentSuccessRequest.TotalCost = orderDetails.TotalCost;
         //orderDetails.HotelRoomDTO.ImageUrls = [];
 
         var finalRoomDetails = await roomOrderDetailsService.MarkPaymentSuccess(paymentSuccessRequest);
