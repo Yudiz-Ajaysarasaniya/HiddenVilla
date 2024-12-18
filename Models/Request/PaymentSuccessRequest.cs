@@ -14,5 +14,7 @@ namespace Models.Request
         public string? StripeSessionId { get; set; }
         public string? Status { get; set; }
         public bool IsPaymentSuccess { get; set; } = false;
+        public string? Email { get; set; }
+        public double TotalCost { get; set; }
     }
 }

@@ -93,8 +93,8 @@ namespace HiddenVilla_Api.Controllers
                     });
                 }
 
-                var email = "ajay.sarasaniya@yudizsolutions.com";
-                new EmailHelper(this.messages).SendPaymentSuccessEmail(email);
+                //var email = "ajay.sarasaniya@yudizsolutions.com";
+                new EmailHelper(this.messages).SendPaymentSuccessEmail(paymentSuccessRequest.Email, paymentSuccessRequest.TotalCost);
 
                 return Ok(result);
             }
