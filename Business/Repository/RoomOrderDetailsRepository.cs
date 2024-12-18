@@ -97,9 +97,34 @@ namespace Business.Repository
             return new RoomOrderDetailsDTO();
         }
 
-        public Task<bool> UpdateOrderStatus(int roomOrderId, string status)
+        public async Task<bool> UpdateOrderStatus(int roomOrderId, string status)
         {
-            throw new NotImplementedException();
+           try
+            {
+                var room = await dbContext.RoomOrderDetails.FirstOrDefaultAsync(x => x.Id == roomOrderId);
+
+                if (room != null)
+                {
+                    room.Status = status;
+
+                    if (status == SetStatus.Status_CheckedIn)
+                    {
+                        room.ActualCheckInDate= DateTime.Now;
+                    }
+                    if (status == SetStatus.Status_CheckedOut_Complete)
+                    {
+                        room.ActualCheckOutDate = DateTime.Now;
+                    }
+                    dbContext.RoomOrderDetails.Update(room);
+                    await dbContext.SaveChangesAsync();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false    ;
+            }
         }
     }
 }

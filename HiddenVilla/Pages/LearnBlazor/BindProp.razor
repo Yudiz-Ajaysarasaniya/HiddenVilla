@@ -1,5 +1,7 @@
 ﻿@page "/bindprop"
 @using Model
+@inject ProtectedLocalStorage localStorage
+@inject ProtectedSessionStorage sessionStorage
 
 <div class="bg-light border p-2">
 
@@ -71,9 +73,15 @@
 
 </div>
 
+<p>Counter Value From Other Page (Sessino) : @CountSession</p><br />
+<p>Counter Value From Other Page (Local) : @CountLocal</p>
+
 @code {
     private string selectedRoom = "";
     private List<BlazorRoom> RoomList = new List<BlazorRoom>();
+
+    private int CountSession { get; set; }
+    private int CountLocal { get; set; }
     BlazorRoom Room = new BlazorRoom()
         {
             Id = 1,
@@ -87,8 +95,15 @@
         }
         };
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+
+        var resultLocal = await localStorage.GetAsync<int>("counterlocal");
+        CountLocal = resultLocal.Success? resultLocal.Value  : 0;
+
+        var resultSession = await sessionStorage.GetAsync<int>("countersession");
+        CountSession = resultSession.Success ? resultSession.Value : 0;
+
         base.OnInitialized();
 
         RoomList.Add(new BlazorRoom()

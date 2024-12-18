@@ -1,0 +1,38 @@
+﻿@if (NotAuthorized)
+{
+    <div class="align-content-center mt-5">
+        <h1 class="text-center">Access Denied!</h1>
+    </div>
+}
+
+
+
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState> authenticationState { get; set; }
+
+    private bool NotAuthorized { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var authstate = await authenticationState;
+        if (authstate?.User?.Identity is null || !authstate.User.Identity.IsAuthenticated)
+        {
+            var returnUrl = navManager.ToBaseRelativePath(navManager.Uri);
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                navManager.NavigateTo("/", true);
+            }
+            else
+            {
+                navManager.NavigateTo($"login?returnUrl={returnUrl}", true);
+            }
+        }
+        else
+        {
+            NotAuthorized = true;
+        }
+    }
+
+}

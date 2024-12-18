@@ -1,0 +1,52 @@
+﻿@page "/room-order-list"
+@using Models.DTO
+@using Radzen
+@using Radzen.Blazor
+@inject IRoomOrderDetailsRepository orderDetailsRepository
+
+
+@if (!IsLoading)
+{
+    <h4 class="card-title text-info">Hotel Room Order's</h4>
+
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="10" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Center" ShowPagingSummary="true"
+                    Data="@roomOrderDetails" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectdedOrder>
+        <Columns>
+            <RadzenDataGridColumn Property="@nameof(RoomOrderDetailsDTO.Id)" Filterable="false" Title="ID" Frozen="true" Width="80px" TextAlign="TextAlign.Center" />
+            <RadzenDataGridColumn Property="@nameof(RoomOrderDetailsDTO.Name)" Title="Name" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(RoomOrderDetailsDTO.Email)" Title="Email" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(RoomOrderDetailsDTO.Phone)" Title="Phone" Width="200px" />
+            <RadzenDataGridColumn Property="@nameof(RoomOrderDetailsDTO.RoomId)" Title="RoomId" Width="120px" />
+            <RadzenDataGridColumn Property="@nameof(RoomOrderDetailsDTO.Status)" Title="Status" Width="160px" />
+            <RadzenDataGridColumn Property="@nameof(RoomOrderDetailsDTO.TotalCost)" Title="TotalCost" Width="160px" />
+            <RadzenDataGridColumn Title="CheckInDate" Frozen="true" Sortable="false" Filterable="false" Width="80px" TextAlign="TextAlign.Center">
+                <Template Context="data">
+                    @String.Format("{0:d}", data.CheckInDate)
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn Title="" Property="Id" Frozen="true" Width="80px" TextAlign="TextAlign.Center">
+                <Template Context="data">
+                   <NavLink class="btn btn-primary" href="@($"room-order-details/details/{data.Id}")">Details</NavLink>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    private IEnumerable<RoomOrderDetailsDTO> roomOrderDetails = new List<RoomOrderDetailsDTO>();
+    private bool IsLoading { get; set; } = false;
+    private IList<RoomOrderDetailsDTO>? selectdedOrder { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsLoading = true;
+        roomOrderDetails = await orderDetailsRepository.GetAllRoomOrderDetails();
+        selectdedOrder = new List<RoomOrderDetailsDTO>(){roomOrderDetails.FirstOrDefault()};
+        IsLoading = false;
+    }
+}
