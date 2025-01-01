@@ -24,7 +24,7 @@ namespace HiddenVilla_Api.Helper
         </tr>
         <tr>
             <td style=""line-height: 24px; font-family: 'Nunito', sans-serif; color: #292929;"">
-                We are pleased to inform you that your payment of <b>{amount}</b> on <b>{17-12-2024}</b> has been successfully processed. 
+                We are pleased to inform you that your payment of <b>{amount}</b> on <b>{DateTime.UtcNow}</b> has been successfully processed. 
             </td>
         </tr>
         <tr>
